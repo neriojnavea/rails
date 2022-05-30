@@ -240,6 +240,7 @@ module ActiveRecord
         end
 
         def violates_strict_loading?
+          return if owner.previously_new_record?
           return reflection.strict_loading? if reflection.options.key?(:strict_loading)
 
           owner.strict_loading? && !owner.strict_loading_n_plus_one_only?

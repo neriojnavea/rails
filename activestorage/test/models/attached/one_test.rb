@@ -403,6 +403,21 @@ class ActiveStorage::OneAttachedTest < ActiveSupport::TestCase
     assert_equal "funky.jpg", user.reload.avatar.filename.to_s
   end
 
+  class Admin < User
+    has_one_attached :avatar, strict_loading: true
+  end
+
+  test "creating a record with an existing blob attached with strict_loading" do
+    user = Admin.create!(name: "Jason", avatar: create_blob(filename: "funky.jpg"))
+    assert_equal "funky.jpg", user.avatar.filename.to_s
+  end
+
+  test "initializing the record with an existing blob attached with strict_loading" do
+    user = Admin.new(name: "Jason", avatar: create_blob(filename: "funky.jpg"))
+    user.save!
+    assert_equal "funky.jpg", user.avatar.filename.to_s
+  end
+
   test "creating a record with an existing blob from a signed ID attached" do
     user = User.create!(name: "Jason", avatar: create_blob(filename: "funky.jpg").signed_id)
     assert_equal "funky.jpg", user.reload.avatar.filename.to_s

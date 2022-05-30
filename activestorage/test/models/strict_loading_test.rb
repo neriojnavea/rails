@@ -26,4 +26,13 @@ class ActiveStorage::StrictLoadingTest < ActiveSupport::TestCase
       admins.as_json(include: :images)
     end
   end
+  
+  test "has_many_attached lets create an record with the images" do
+    blob = create_blob
+
+    Admin.create!(
+      name: "David",
+      image: blob
+    )
+  end
 end
